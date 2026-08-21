@@ -35,3 +35,8 @@ class Admin(StatesGroup):
     waiting_for_admin_card = State()
     waiting_for_admin_name = State()
     broadcast = State()
+    
+    promo_menu = State()
+    waiting_for_promo_code = State()
+    waiting_for_promo_amount = State()
+    waiting_for_promo_limit = State()

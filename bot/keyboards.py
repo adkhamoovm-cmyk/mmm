@@ -80,6 +80,7 @@ def admin_main_kb():
         keyboard=[
             [KeyboardButton(text="👥 Foydalanuvchini boshqarish")],
             [KeyboardButton(text="📊 Statistika"), KeyboardButton(text="📢 Xabar yuborish")],
+            [KeyboardButton(text="🎁 Promokod yaratish")],
             [KeyboardButton(text="⚙️ Tizim sozlamalari")],
             [KeyboardButton(text="⬅️ Asosiy menyu")]
         ], resize_keyboard=True
@@ -94,6 +95,14 @@ def admin_user_kb():
             [KeyboardButton(text="💰 Balansni o'zgartirish"), KeyboardButton(text="🤝 Taklif qilganlar / Referallari")],
             [KeyboardButton(text="💳 Kartani o'zgartirish"), KeyboardButton(text="📜 Tarixini ko'rish")],
             [KeyboardButton(text="🚫 Ban / Unban")],
+            [KeyboardButton(text="🔙 Admin menyu")]
+        ], resize_keyboard=True
+    )
+
+def admin_promo_kb():
+    return ReplyKeyboardMarkup(
+        keyboard=[
+            [KeyboardButton(text="➕ Yangi yaratish"), KeyboardButton(text="📋 Promokodlar ro'yxati")],
             [KeyboardButton(text="🔙 Admin menyu")]
         ], resize_keyboard=True
     )
