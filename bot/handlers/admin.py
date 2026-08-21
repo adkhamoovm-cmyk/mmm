@@ -161,7 +161,6 @@ async def search_user(message: Message, state: FSMContext):
                f"Username: @{user.username}\n" \
                f"Telefon: {user.phone}\n" \
                f"Balans: {user.balance:,.0f} UZS\n" \
-               
                f"Kiritgan depoziti: {user.deposit_total:,.0f} UZS\n" \
                f"Yechgan puli: {user.withdraw_total:,.0f} UZS\n" \
                f"Karta turi: {user.card_type}\n" \

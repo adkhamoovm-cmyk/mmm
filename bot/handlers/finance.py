@@ -6,7 +6,7 @@ from bot.keyboards import cabinet_kb, main_menu_kb, back_kb
 from bot.states import Cabinet
 from bot.config import ADMIN_IDS
 from aiogram.fsm.context import FSMContext
-from datetime import datetime
+from datetime import datetime, timedelta
 
 router = Router()
 
@@ -92,11 +92,12 @@ async def deposit_receipt_invalid(message: Message, state: FSMContext):
 
 @router.message(F.text == "📤 Pul yechish")
 async def withdraw_menu(message: Message, state: FSMContext):
-    if datetime.utcnow().weekday() == 6:
+    uzb_time = datetime.utcnow() + timedelta(hours=5)
+    if uzb_time.weekday() == 6:
         await message.answer("❌ Yakshanba kuni pul yechib bo'lmaydi.")
         return
         
-    hour = datetime.utcnow().hour + 5 # Uzb time approx
+    hour = uzb_time.hour
     if not (10 <= hour < 17):
         await message.answer("❌ Pul yechish faqat 10:00 dan 17:00 gacha ishlaydi.")
         return

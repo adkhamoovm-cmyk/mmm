@@ -6,7 +6,7 @@ from bot.keyboards import task_packing_kb, task_shipping_kb, task_review_kb, tas
 from bot.states import Task
 from aiogram.fsm.context import FSMContext
 from sqlalchemy import select, and_
-from datetime import datetime
+from datetime import datetime, timedelta
 import asyncio
 import random
 
@@ -19,9 +19,15 @@ SHOPS_INCOME = {
     3: (3700, 4450)
 }
 
+def get_task_date(dt: datetime):
+    return (dt + timedelta(hours=5, minutes=-30)).date()
+
 @router.message(F.text == "📦 BUYURTMALAR / VAZIFALAR")
 async def tasks_menu(message: Message, state: FSMContext):
-    if datetime.utcnow().weekday() == 6: # Sunday
+    now_utc = datetime.utcnow()
+    current_task_date = get_task_date(now_utc)
+    
+    if current_task_date.weekday() == 6: # Sunday
         await message.answer("❌ Yakshanba — dam olish kuni. Pul yechish va vazifalar bajarish to'xtatilgan.", reply_markup=main_menu_kb())
         return
         
@@ -33,7 +39,7 @@ async def tasks_menu(message: Message, state: FSMContext):
             await message.answer("❌ Sizda faol do'konlar yo'q. Iltimos do'kon xarid qiling.", reply_markup=main_menu_kb())
             return
             
-        today = datetime.utcnow().date()
+        today = current_task_date
         shop_to_task = None
         total_capacity = 0
         total_done = 0
@@ -43,7 +49,7 @@ async def tasks_menu(message: Message, state: FSMContext):
                 shop.is_active = False
                 continue
                 
-            if shop.last_task_date and shop.last_task_date.date() < today:
+            if shop.last_task_date and get_task_date(shop.last_task_date) < today:
                 shop.daily_tasks_done = 0
                 
             total_capacity += 3
@@ -55,7 +61,7 @@ async def tasks_menu(message: Message, state: FSMContext):
         await session.commit()
         
         if not shop_to_task:
-            await message.answer("❌ Siz bugungi barcha buyurtmalarni bajarib bo'lgansiz. Yangi buyurtmalar ertaga soat 00:00 da yangilanadi. Ertaga qaytib keling!", reply_markup=main_menu_kb())
+            await message.answer("❌ Siz bugungi barcha buyurtmalarni bajarib bo'lgansiz. Yangi buyurtmalar ertaga soat 00:30 da yangilanadi. Ertaga qaytib keling!", reply_markup=main_menu_kb())
             return
             
         current_task_num = total_done + 1
